@@ -1,5 +1,8 @@
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
+import { db } from '~/drizzle/config.server'
+import { items } from '~/drizzle/schema/items.server'
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,11 +11,17 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const itemsData = await db.select().from(items).all()
+
+  return null
+}
+
 const linkStyle = 'underline decoration-dotted'
 export default function Index() {
   return (
     <div>
-      <div className="flex items-baseline gap-8 bg-blue-300 p-8">
+      <div className="flex items-baseline gap-8 p-8 bg-blue-300">
         <img
           src="/images/Remix-Logo-Full-Black.svg"
           alt="Remix Logo"
